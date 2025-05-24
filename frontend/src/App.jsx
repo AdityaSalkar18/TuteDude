@@ -18,11 +18,11 @@ const App = () => {
   const userid = 'user123';
   const userName = 'Aditya Salkar';
 
-  
+
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/video/progress/${userid}`);
+        const res = await axios.get(`/api/video/progress/${userid}`);
         const progressMap = {};
         res.data.forEach((entry) => {
           progressMap[entry.videoid] = entry.videoprogress;
@@ -36,7 +36,7 @@ const App = () => {
     fetchProgress();
   }, [userid]);
 
- 
+
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -65,7 +65,7 @@ const App = () => {
     const rounded = Math.floor(percent);
 
     try {
-      await axios.patch(`http://localhost:8000/api/video/save`, {
+      await axios.patch(`/api/video/save`, {
         userid,
         userName,
         videoid: selectedVideo,
@@ -86,7 +86,7 @@ const App = () => {
 
   return (
     <>
-     
+
       <nav className="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-200">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a href="#" className="flex items-center space-x-3">
@@ -103,10 +103,10 @@ const App = () => {
         </div>
       </nav>
 
-      
+
       <div className="container mx-auto px-4 py-8 mt-24">
         <div className="flex flex-col md:flex-row gap-8">
-        
+
           <div className="flex-1">
             <video
               ref={videoRef}
@@ -115,18 +115,20 @@ const App = () => {
               onTimeUpdate={handleTimeUpdate}
               className="w-full rounded shadow"
             />
+            <p className="mt-3 text-xl font-semibold text-gray-700">
+              {videos.find((v) => v.id === selectedVideo)?.title}
+            </p>
           </div>
 
-          
+
           <div className="w-full md:w-1/3">
             <h2 className="text-xl font-bold mb-4">Video List</h2>
             <div className="space-y-4">
               {videos.map((video) => (
                 <div
                   key={video.id}
-                  className={`p-4 border rounded shadow cursor-pointer ${
-                    selectedVideo === video.id ? 'bg-gray-100' : ''
-                  }`}
+                  className={`p-4 border rounded shadow cursor-pointer ${selectedVideo === video.id ? 'bg-gray-100' : ''
+                    }`}
                   onClick={() => setSelectedVideo(video.id)}
                 >
                   <p className="text-lg font-medium">{video.title}</p>
